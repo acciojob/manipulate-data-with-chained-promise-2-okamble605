@@ -5,34 +5,28 @@ document.addEventListener("DOMContentLoaded", () => {
   function getNumbers() {
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve([1, 2, 3, 4]); // Original array
+        resolve([1, 2, 3, 4]); // The array of numbers
       }, 3000);
     });
   }
 
-  // Main execution with chained promises
-  getNumbers()
-    .then((numbers) => {
-      // Filter out odd numbers
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          const evenNumbers = numbers.filter((num) => num % 2 === 0);
-          output.textContent = `Filtered Evens: ${evenNumbers.join(", ")}`;
-          resolve(evenNumbers);
-        }, 1000); // Display after 1 second
-      });
-    })
-    .then((evenNumbers) => {
-      // Multiply even numbers by 2
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          const doubledNumbers = evenNumbers.map((num) => num * 2);
-          output.textContent = `Doubled Evens: ${doubledNumbers.join(", ")}`;
-          resolve(doubledNumbers);
-        }, 2000); // Display after 2 seconds
-      });
-    })
-    .catch((error) => {
-      console.error("Error:", error); // Handle errors if any
-    });
+  // Main function that uses chained promises
+  async function processNumbers() {
+    const numbers = await getNumbers(); // Wait for the array
+
+    // Filter out the odd numbers and display them after 1 second
+    const evenNumbers = numbers.filter(num => num % 2 === 0);
+    setTimeout(() => {
+      output.textContent = `Even numbers: ${evenNumbers.join(", ")}`;
+    }, 1000); // Display after 1 second
+
+    // Multiply even numbers by 2 and display after another 2 seconds
+    setTimeout(() => {
+      const doubledNumbers = evenNumbers.map(num => num * 2);
+      output.textContent = `Doubled even numbers: ${doubledNumbers.join(", ")}`;
+    }, 3000); // Display after 3 seconds
+  }
+
+  // Start the process when the page is loaded
+  processNumbers();
 });
